@@ -18,12 +18,14 @@ export const CODE = {
 export const TableContext = createContext({
     tableData: [],
     dispatch: () => {},
+    halted: true,
 });
 
 const initialState = {
     tableData: [],
     timer: 0,
     result: '',
+    halted: true,
 }
 
 const plantMine = (row, cell, mine) => {
@@ -59,15 +61,66 @@ const plantMine = (row, cell, mine) => {
 }
 
 export const START_GAME = 'START_GAME';
+export const OPEN_CELL = 'OPEN_CELL';
+export const CLICK_MINE = 'CLICK_MINE';
+export const FLAG_CELL = 'FLAG_CELL';
+export const QUESTION_CELL = 'QUESTION_CELL';
+export const NORMAL_CELL = 'NORMAL_CELL';
 
 const reducer = (state, action) => {
     switch (action.type) {
         case START_GAME:
             return {
                 ...state,
-                tableData: plantMine(action.row, action.cell, action.mine)
+                tableData: plantMine(action.row, action.cell, action.mine),
+                halted: false,
             };
-
+        case OPEN_CELL: {
+            const tableData = [...state.tableData];
+            tableData[action.row] = [...state.tableData[action.row]];
+            tableData[action.row][action.cell] = CODE.OPENED;
+            return {
+                ...state,
+                tableData,
+            }
+        }
+        case CLICK_MINE: {
+            const tableData = [...state.tableData];
+            tableData[action.row] = [...state.tableData[action.row]];
+            tableData[action.row][action.cell] = CODE.CLICKED_MINE;
+            return {
+                ...state,
+                tableData,
+                halted: true,
+            }
+        }
+        case FLAG_CELL: {
+            const tableData = [...state.tableData];
+            tableData[action.row] = [...state.tableData[action.row]];
+            tableData[action.row][action.cell] = tableData[action.row][action.cell]===CODE.MINE?CODE.FLAG_MINE:CODE.FLAG;
+            return {
+                ...state,
+                tableData,
+            }
+        }
+        case QUESTION_CELL: {
+            const tableData = [...state.tableData];
+            tableData[action.row] = [...state.tableData[action.row]];
+            tableData[action.row][action.cell] = tableData[action.row][action.cell]===CODE.FLAG_MINE?CODE.QUESTION_MINE:CODE.QUESTION;
+            return {
+                ...state,
+                tableData,
+            }
+        }
+        case NORMAL_CELL: {
+            const tableData = [...state.tableData];
+            tableData[action.row] = [...state.tableData[action.row]];
+            tableData[action.row][action.cell] = tableData[action.row][action.cell]===CODE.QUESTION_MINE?CODE.MINE:CODE.NORMAL;
+            return {
+                ...state,
+                tableData,
+            }
+        }
         default: 
             return state;
     }
@@ -76,17 +129,17 @@ const reducer = (state, action) => {
 
 const MineSearch = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
-
+    const { tableData, halted, timer, result } = state;
     //useMemo로 캐싱을 해줘야 contextAPI 사용시 계속되는 렌더링을 막을 수 있다.
-    const value = useMemo(() => ({ tableData: state.tableData, dispatch }), [state.tableData]);
+    const value = useMemo(() => ({ tableData: tableData, halted: halted, dispatch }), [tableData, halted]);
 
     return (
         //value = {{ tableData: state.tableData, dispatch }} 원래는 이렇게 들어가지만 useMemo로 캐싱해줌
         <TableContext.Provider value = {value}>  
             <Form />
-            <div>{state.timer}</div>
+            <div>{timer}</div>
             <Table />
-            <div>{state.result}</div>
+            <div>{result}</div>
         </TableContext.Provider>
     )
 }
