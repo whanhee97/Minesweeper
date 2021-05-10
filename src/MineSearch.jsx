@@ -54,6 +54,8 @@ const plantMine = (row, cell, mine) => {
         const hor = shuffle[k] % cell;
         data[ver][hor] = CODE.MINE;
     }
+    
+    return data;
 }
 
 export const START_GAME = 'START_GAME';
@@ -63,8 +65,8 @@ const reducer = (state, action) => {
         case START_GAME:
             return {
                 ...state,
-                tableData: plantMine(action.row, action.cell, action.mine);
-            } 
+                tableData: plantMine(action.row, action.cell, action.mine)
+            };
 
         default: 
             return state;
