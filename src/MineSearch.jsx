@@ -78,7 +78,32 @@ const reducer = (state, action) => {
         case OPEN_CELL: {
             const tableData = [...state.tableData];
             tableData[action.row] = [...state.tableData[action.row]];
-            tableData[action.row][action.cell] = CODE.OPENED;
+            
+            let around = [] // 주변의 상태 값을 담는다 
+            if (tableData[action.row - 1]) { // 양 옆이 없을 때는 undefined를 배열에 담는다
+                around = around.concat(
+                    tableData[action.row - 1][action.cell - 1],
+                    tableData[action.row - 1][action.cell],
+                    tableData[action.row - 1][action.cell + 1],
+                );
+            }
+
+            around = around.concat(
+                tableData[action.row][action.cell - 1],
+                tableData[action.row][action.cell + 1],
+            );
+
+            if (tableData[action.row + 1]) {
+                around = around.concat(
+                    tableData[action.row + 1][action.cell - 1],
+                    tableData[action.row + 1][action.cell],
+                    tableData[action.row + 1][action.cell + 1],
+                );
+            }
+
+            const count = around.filter((v) => [CODE.FLAG_MINE,CODE.MINE,CODE.QUESTION_MINE].includes(v)).length;
+            tableData[action.row][action.cell] = count;
+            
             return {
                 ...state,
                 tableData,

@@ -33,7 +33,7 @@ const getTdStyle = (code) => {
 const getTdText = (code) => {
     switch (code) {
         case CODE.NORMAL:
-            return ' ';
+            return '';
         case CODE.MINE:
             return 'X';
         case CODE.CLICKED_MINE:
@@ -45,7 +45,7 @@ const getTdText = (code) => {
         case CODE.QUESTION:
             return '?';
         default:
-            return ' ';
+            return code || '';
     }
 
 };
