@@ -26,7 +26,6 @@ const initialState = {
     timer: 0,
     result: '',
     halted: true,
-    openCount: 0,
     gameData: {
         row: 0,
         cell: 0,
@@ -72,6 +71,7 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMAL_CELL = 'NORMAL_CELL';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -85,7 +85,6 @@ const reducer = (state, action) => {
                     cell: action.cell,
                     mine: action.mine,
                 },
-                openCount: 0,
                 timer: 0,
                 result: '',
             };
@@ -135,8 +134,7 @@ const reducer = (state, action) => {
                         tableData[row + 1][cell + 1],]
                     );
                 }
-                
-                openCount += 1 
+                 
                 const count = around.filter((v) => [CODE.FLAG_MINE,CODE.MINE,CODE.QUESTION_MINE].includes(v)).length;
                 
 
@@ -167,18 +165,25 @@ const reducer = (state, action) => {
             };
 
             checkAround(action.row, action.cell);
+
+            tableData.forEach((tr,i)=>{
+                tr.forEach((td,j)=>{
+                    if (td >= 0) {
+                        openCount += 1;
+                    }
+                })
+            })
             
             let halted = false;
             let result = '';
             
-            if (state.openCount + openCount === state.gameData.row*state.gameData.cell-state.gameData.mine) {
+            if (openCount === state.gameData.row*state.gameData.cell-state.gameData.mine) {
                 halted = true;
                 result = "Win!!";
             }   
             return {
                 ...state,
                 tableData,
-                openCount: state.openCount + openCount,
                 halted,
                 result,
             }
@@ -219,6 +224,12 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 tableData,
+            }
+        }
+        case INCREMENT_TIMER: {
+            return {
+                ...state,
+                timer: state.timer + 1,
             }
         }
         default: 
