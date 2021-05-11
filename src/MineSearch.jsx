@@ -26,6 +26,12 @@ const initialState = {
     timer: 0,
     result: '',
     halted: true,
+    openCount: 0,
+    gameData: {
+        row: 0,
+        cell: 0,
+        mine: 0,
+    },
 }
 
 const plantMine = (row, cell, mine) => {
@@ -74,6 +80,14 @@ const reducer = (state, action) => {
                 ...state,
                 tableData: plantMine(action.row, action.cell, action.mine),
                 halted: false,
+                gameData: {
+                    row: action.row,
+                    cell: action.cell,
+                    mine: action.mine,
+                },
+                openCount: 0,
+                timer: 0,
+                result: '',
             };
         case OPEN_CELL: {
             const tableData = [...state.tableData];
@@ -81,7 +95,9 @@ const reducer = (state, action) => {
             tableData.forEach((row,i) => {
                 tableData[i] = [...row];
             }) // 모든 칸을 새로운 객체로 만들어 준다.
-            const checked = []
+            const checked = [];
+
+            let openCount = 0;
 
             const checkAround = (row, cell) => {
                 // 상하 좌우 필터링
@@ -119,7 +135,8 @@ const reducer = (state, action) => {
                         tableData[row + 1][cell + 1],]
                     );
                 }
-
+                
+                openCount += 1 
                 const count = around.filter((v) => [CODE.FLAG_MINE,CODE.MINE,CODE.QUESTION_MINE].includes(v)).length;
                 
 
@@ -151,10 +168,21 @@ const reducer = (state, action) => {
 
             checkAround(action.row, action.cell);
             
+            let halted = false;
+            let result = '';
+            
+            if (state.openCount + openCount === state.gameData.row*state.gameData.cell-state.gameData.mine) {
+                halted = true;
+                result = "Win!!";
+            }   
             return {
                 ...state,
                 tableData,
+                openCount: state.openCount + openCount,
+                halted,
+                result,
             }
+            
         }
         case CLICK_MINE: {
             const tableData = [...state.tableData];
