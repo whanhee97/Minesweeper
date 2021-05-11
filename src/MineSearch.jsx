@@ -77,32 +77,79 @@ const reducer = (state, action) => {
             };
         case OPEN_CELL: {
             const tableData = [...state.tableData];
-            tableData[action.row] = [...state.tableData[action.row]];
-            
-            let around = [] // 주변의 상태 값을 담는다 
-            if (tableData[action.row - 1]) { // 양 옆이 없을 때는 undefined를 배열에 담는다
+            //tableData[action.row] = [...state.tableData[action.row]];
+            tableData.forEach((row,i) => {
+                tableData[i] = [...row];
+            }) // 모든 칸을 새로운 객체로 만들어 준다.
+            const checked = []
+
+            const checkAround = (row, cell) => {
+                // 상하 좌우 필터링
+                if (row < 0  || row >= tableData.length || cell < 0 || cell >= tableData[0].length) { 
+                    return;
+                }
+                // 못여는 칸 필터링
+                if ([CODE.FLAG,CODE.FLAG_MINE,CODE.OPENED,CODE.QUESTION,CODE.QUESTION_MINE].includes(tableData[row][cell])) {
+                    return;
+                }
+                // 중복 체크
+                if (checked.includes(row + ',' + cell)) {
+                    return;
+                } else {
+                    checked.push(row + ',' + cell);
+                }
+                let around = [] // 주변의 상태 값을 담는다 
+                if (tableData[row - 1]) { // 양 옆이 없을 때는 undefined를 배열에 담는다
+                    around = around.concat(
+                        [tableData[row - 1][cell - 1],
+                        tableData[row - 1][cell],
+                        tableData[row - 1][cell + 1],]
+                    );
+                }
+
                 around = around.concat(
-                    tableData[action.row - 1][action.cell - 1],
-                    tableData[action.row - 1][action.cell],
-                    tableData[action.row - 1][action.cell + 1],
+                    [tableData[row][cell - 1],
+                    tableData[row][cell + 1],]
                 );
-            }
 
-            around = around.concat(
-                tableData[action.row][action.cell - 1],
-                tableData[action.row][action.cell + 1],
-            );
+                if (tableData[row + 1]) {
+                    around = around.concat(
+                        [tableData[row + 1][cell - 1],
+                        tableData[row + 1][cell],
+                        tableData[row + 1][cell + 1],]
+                    );
+                }
 
-            if (tableData[action.row + 1]) {
-                around = around.concat(
-                    tableData[action.row + 1][action.cell - 1],
-                    tableData[action.row + 1][action.cell],
-                    tableData[action.row + 1][action.cell + 1],
-                );
-            }
+                const count = around.filter((v) => [CODE.FLAG_MINE,CODE.MINE,CODE.QUESTION_MINE].includes(v)).length;
+                
 
-            const count = around.filter((v) => [CODE.FLAG_MINE,CODE.MINE,CODE.QUESTION_MINE].includes(v)).length;
-            tableData[action.row][action.cell] = count;
+                if (count === 0) {
+                    if (row > -1) {
+                        const near = [];
+                        if (row - 1 > -1) {
+                            near.push([row-1,cell-1]);
+                            near.push([row-1,cell]);
+                            near.push([row-1,cell+1]);
+                        }
+                        near.push([row,cell-1]);
+                        near.push([row,cell+1]);
+                        if (row + 1 < tableData.length) {
+                            near.push([row+1,cell-1]);
+                            near.push([row+1,cell]);
+                            near.push([row+1,cell+1]);
+                        }
+                        near.forEach((n) => {
+                            if(tableData[n[0]][n[1]] !== CODE.OPENED) {
+                                checkAround(n[0],n[1]);
+                            }
+                        })
+                    }
+                    
+                }
+                tableData[row][cell] = count;
+            };
+
+            checkAround(action.row, action.cell);
             
             return {
                 ...state,
