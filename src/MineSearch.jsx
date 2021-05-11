@@ -1,4 +1,4 @@
-import React, {useReducer, createContext, useMemo} from 'react'
+import React, {useReducer, createContext, useMemo, useEffect} from 'react'
 import Table from './Table'
 import Form from './Form'
 
@@ -179,7 +179,7 @@ const reducer = (state, action) => {
             
             if (openCount === state.gameData.row*state.gameData.cell-state.gameData.mine) {
                 halted = true;
-                result = "Win!!";
+                result = `You won in ${state.timer} seconds!!`;
             }   
             return {
                 ...state,
@@ -243,6 +243,18 @@ const MineSearch = () => {
     const { tableData, halted, timer, result } = state;
     //useMemo로 캐싱을 해줘야 contextAPI 사용시 계속되는 렌더링을 막을 수 있다.
     const value = useMemo(() => ({ tableData: tableData, halted: halted, dispatch }), [tableData, halted]);
+
+    useEffect(() => {
+        let timer;
+        if (!halted){
+            timer = setInterval(() => {
+                dispatch({ type: INCREMENT_TIMER });
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        }
+    },[halted]);
 
     return (
         //value = {{ tableData: state.tableData, dispatch }} 원래는 이렇게 들어가지만 useMemo로 캐싱해줌
