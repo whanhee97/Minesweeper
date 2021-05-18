@@ -37,12 +37,78 @@
   }
 }
 
+.result-fail {
+  font-size: 30px;
+  font-weight: bold;
+  color: #b52020;
+}
+
+.result-win {
+  font-size: 30px;
+  font-weight: bold;
+  color: #000000;
+  color: orange;
+}
+
+.result-win .fa-smile-wink {
+  font-size: 50px;
+}
+
+.svg-inline--fa {
+  font-size: 23px;
+}
+
+.fa-bomb {
+  font-size: 28px;
+}
+
 table {
   border-collapse: collapse;
+  margin: 50px auto;
 }
+
 td {
-  border: 1px solid black;
+  border: 5px solid black;
   width: 40px;
   height: 40px;
   text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.fa-skull-crossbones {
+  font-size: 60px;
+}
+
+.timer .svg-inline--fa {
+  font-size: inherit;
+}
+
+.timer {
+  margin-top: 30px;
+  font-size: 40px;
+}
+
+.set-option {
+  display: flex;
+  margin: 30px auto 0;
+  justify-content: center;
+}
+
+.set-option input[type="number"] {
+  width: 9%;
+  height: 30px;
+  font-size: 22px;
+  margin-right: 22px;
+  /* padding: 0 10px; */
+  text-align: center;
+  border: 0;
+  /* text-indent: 17px; */
+  border-bottom: 4px solid #000;
+}
+
+.set-option button {
+  width: 10%;
+  font-size: 17px;
+  font-weight: bold;
 }

@@ -1,6 +1,8 @@
 import React, {useReducer, createContext, useMemo, useEffect} from 'react'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Table from './Table'
 import Form from './Form'
+import { faSkullCrossbones, faSmileWink, faStopwatch } from '@fortawesome/free-solid-svg-icons';
 
 // 지뢰 상태 코드
 export const CODE = {
@@ -31,6 +33,7 @@ const initialState = {
         cell: 0,
         mine: 0,
     },
+    isWin: false,
 }
 
 const plantMine = (row, cell, mine) => {
@@ -87,6 +90,7 @@ const reducer = (state, action) => {
                 },
                 timer: 0,
                 result: '',
+                isWin: false,
             };
         case OPEN_CELL: {
             const tableData = [...state.tableData];
@@ -176,16 +180,18 @@ const reducer = (state, action) => {
             
             let halted = false;
             let result = '';
-            
+            let isWin = false;
             if (openCount === state.gameData.row*state.gameData.cell-state.gameData.mine) {
                 halted = true;
-                result = `You won in ${state.timer} seconds!!`;
+                result = <div>You won in {state.timer} seconds!!</div>;
+                isWin = true;
             }   
             return {
                 ...state,
                 tableData,
                 halted,
                 result,
+                isWin,
             }
             
         }
@@ -193,9 +199,22 @@ const reducer = (state, action) => {
             const tableData = [...state.tableData];
             tableData[action.row] = [...state.tableData[action.row]];
             tableData[action.row][action.cell] = CODE.CLICKED_MINE;
+            for(let i = 0 ; i < state.gameData.row; i++) {
+                for(let j = 0 ; j < state.gameData.cell; j++) {
+                    if (tableData[i][j] === CODE.MINE || tableData[i][j] === CODE.FLAG_MINE) {
+                        tableData[i][j] = CODE.CLICKED_MINE;
+                    }
+                }
+            }
+
+            const skull =  (
+            <div>
+                <FontAwesomeIcon icon={faSkullCrossbones} /> <div>YOU DIE</div>
+            </div>)
             return {
                 ...state,
                 tableData,
+                result: skull,
                 halted: true,
             }
         }
@@ -260,11 +279,13 @@ const MineSearch = () => {
         //value = {{ tableData: state.tableData, dispatch }} 원래는 이렇게 들어가지만 useMemo로 캐싱해줌
         <TableContext.Provider value = {value}>  
             <Form />
-            <div>{timer}</div>
+            <div class="timer"><FontAwesomeIcon icon={faStopwatch} /> {timer}</div>
             <Table />
-            <div>{result}</div>
+            
+            {state.isWin?<div class="result-win"><FontAwesomeIcon icon={faSmileWink} /> {result}</div>:<div class="result-fail">{result}</div>}
         </TableContext.Provider>
     )
+    
 }
 
 export default MineSearch;

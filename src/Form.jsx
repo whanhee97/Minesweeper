@@ -25,7 +25,7 @@ const Form = memo(() => {
     }, [row, cell, mine]);
 
     return (
-        <div>
+        <div class="set-option">
             <input type="number" placeholder="세로" value={row} onChange={onChangeRow} />
             <input type="number" placeholder="가로" value={cell} onChange={onChangeCell} />
             <input type="number" placeholder="지뢰" value={mine} onChange={onChangeMine} />

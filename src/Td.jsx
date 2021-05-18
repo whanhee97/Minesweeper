@@ -1,5 +1,7 @@
 import React, { memo, useCallback, useContext, useMemo } from 'react'
 import { CODE, OPEN_CELL, CLICK_MINE, TableContext, FLAG_CELL,  QUESTION_CELL, NORMAL_CELL} from './MineSearch';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {  faBomb, faFlag, faQuestion} from '@fortawesome/free-solid-svg-icons'
 
 const getTdStyle = (code) => {
     switch (code) {
@@ -9,6 +11,9 @@ const getTdStyle = (code) => {
                 background: '#444',
             };
         case CODE.CLICKED_MINE:
+            return {
+                background: 'red',
+            };
         case CODE.OPENED:
             return {
                 background: 'white',
@@ -21,7 +26,7 @@ const getTdStyle = (code) => {
         case CODE.FLAG_MINE:
         case CODE.FLAG:
             return {
-                background: 'red',
+                background: 'green',
             }
         default:
             return {
@@ -35,15 +40,18 @@ const getTdText = (code) => {
         case CODE.NORMAL:
             return '';
         case CODE.MINE:
-            return 'X';
+            return '';
         case CODE.CLICKED_MINE:
-            return '펑';
+            const boom = <FontAwesomeIcon icon={faBomb} />
+            return boom;
         case CODE.FLAG_MINE:
         case CODE.FLAG:
-            return '!';
+            const flag = <FontAwesomeIcon icon={faFlag} />
+            return flag;
         case CODE.QUESTION_MINE:
         case CODE.QUESTION:
-            return '?';
+            const question = <FontAwesomeIcon icon={faQuestion} />
+            return question;
         default:
             return code || '';
     }
@@ -54,6 +62,7 @@ const Td = memo(({ rowIndex, cellIndex }) => {
     const { tableData, dispatch, halted } = useContext(TableContext);
     
     const onClickTd = useCallback(() => {
+        console.log(halted)
         if (halted) {
             return;
         }
@@ -102,14 +111,14 @@ const Td = memo(({ rowIndex, cellIndex }) => {
         }
     }, [tableData[rowIndex][cellIndex], halted]);
 
-    return useMemo(() =>(
+    return (
         <td
             style={getTdStyle(tableData[rowIndex][cellIndex])}
             onClick={onClickTd}
             onContextMenu={onRightClickTd}
         >{getTdText(tableData[rowIndex][cellIndex])}
         </td>
-    ),[tableData[rowIndex][cellIndex]]);
+    )
 
 });
 
