@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.3150f376.chunk.css",
-    "main.js": "/static/js/main.533cd864.chunk.js",
-    "main.js.map": "/static/js/main.533cd864.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.cac8761c.js",
-    "runtime-main.js.map": "/static/js/runtime-main.cac8761c.js.map",
-    "static/js/2.0a7d664c.chunk.js": "/static/js/2.0a7d664c.chunk.js",
-    "static/js/2.0a7d664c.chunk.js.map": "/static/js/2.0a7d664c.chunk.js.map",
-    "static/js/3.968ad386.chunk.js": "/static/js/3.968ad386.chunk.js",
-    "static/js/3.968ad386.chunk.js.map": "/static/js/3.968ad386.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.3150f376.chunk.css.map": "/static/css/main.3150f376.chunk.css.map",
-    "static/js/2.0a7d664c.chunk.js.LICENSE.txt": "/static/js/2.0a7d664c.chunk.js.LICENSE.txt"
+    "main.css": "/Minesweeper/static/css/main.3150f376.chunk.css",
+    "main.js": "/Minesweeper/static/js/main.533cd864.chunk.js",
+    "main.js.map": "/Minesweeper/static/js/main.533cd864.chunk.js.map",
+    "runtime-main.js": "/Minesweeper/static/js/runtime-main.8bfd1b4f.js",
+    "runtime-main.js.map": "/Minesweeper/static/js/runtime-main.8bfd1b4f.js.map",
+    "static/js/2.0a7d664c.chunk.js": "/Minesweeper/static/js/2.0a7d664c.chunk.js",
+    "static/js/2.0a7d664c.chunk.js.map": "/Minesweeper/static/js/2.0a7d664c.chunk.js.map",
+    "static/js/3.968ad386.chunk.js": "/Minesweeper/static/js/3.968ad386.chunk.js",
+    "static/js/3.968ad386.chunk.js.map": "/Minesweeper/static/js/3.968ad386.chunk.js.map",
+    "index.html": "/Minesweeper/index.html",
+    "static/css/main.3150f376.chunk.css.map": "/Minesweeper/static/css/main.3150f376.chunk.css.map",
+    "static/js/2.0a7d664c.chunk.js.LICENSE.txt": "/Minesweeper/static/js/2.0a7d664c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.cac8761c.js",
+    "static/js/runtime-main.8bfd1b4f.js",
     "static/js/2.0a7d664c.chunk.js",
     "static/css/main.3150f376.chunk.css",
     "static/js/main.533cd864.chunk.js"
