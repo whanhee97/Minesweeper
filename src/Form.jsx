@@ -22,7 +22,7 @@ const Form = memo(() => {
 
     const onClickBtn = useCallback(() => {
         dispatch({ type: START_GAME, row, cell, mine});
-    }, [row, cell, mine]);
+    }, [dispatch, row, cell, mine]);
 
     return (
         <div class="set-option">

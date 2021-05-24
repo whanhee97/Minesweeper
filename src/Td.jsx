@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useContext, useMemo } from 'react'
+import React, { memo, useCallback, useContext } from 'react'
 import { CODE, OPEN_CELL, CLICK_MINE, TableContext, FLAG_CELL,  QUESTION_CELL, NORMAL_CELL} from './MineSearch';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {  faBomb, faFlag, faQuestion} from '@fortawesome/free-solid-svg-icons'
@@ -83,7 +83,7 @@ const Td = memo(({ rowIndex, cellIndex }) => {
                 return;
         }
         
-    }, [tableData[rowIndex][cellIndex], halted]);
+    }, [tableData,cellIndex,rowIndex,dispatch ,halted]);
 
     const onRightClickTd = useCallback((e) => {
         e.preventDefault(); // 디폴트로 메뉴가 뜨는것을 방지
@@ -109,7 +109,7 @@ const Td = memo(({ rowIndex, cellIndex }) => {
             default:
                 return;
         }
-    }, [tableData[rowIndex][cellIndex], halted]);
+    }, [tableData,cellIndex,rowIndex,dispatch ,halted]);
 
     return (
         <td
